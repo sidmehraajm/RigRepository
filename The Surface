@@ -7,10 +7,10 @@
 #Mobile: +91-7728050400(Whatsapp)
 
 
-#This script created a bendy surface for attaching in rigs
+#This script creates a bendy surface for attaching in rigs
 
 
-#Run this command proxyCube() after runin the script for a tempobject for basic skin for copying
+#Run this command proxyCube() after executing this script,to create a tempobject for example skin for copying
 
 import maya.cmds as cmds
 import maya.mel as mel
