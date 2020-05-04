@@ -33,6 +33,7 @@ def UI():
     cmds.columnLayout(adj=False)
     cmds.button(l='Create 8 Control Wire(Adjust controllers ac to the mesh)',h=50,c='Eightcrv()')
     cmds.button(l='Create 5 Control Wire(Adjust controllers ac to the mesh)',h=50,c='Fivecrv()')
+    cmds.button(l='Create 12 Control Wire(Adjust controllers ac to the mesh)',h=50,c='Twlcrv()')
     cmds.button(l='FinalizeRig (Select Mesh and Wire)',w=300,h=100,c='final()')
     cmds.showWindow('Wire')
 
@@ -79,6 +80,41 @@ def Eightcrv():
     return ctrlList
     
 
+
+def Twlcrv():
+        
+    GlobalName = 'tmp'
+    basecurve12 = cmds.rename( mel.eval("curve -d 3 -p -11 0 0 -p -9 0 0 -p -7 0 0 -p -5 0 0 -p -3 0 0 -p -1 0 0 -p 1 0 0 -p 3 0 0 -p 5 0 0 -p 7 0 0 -p 9 0 0 -p 11 0 0 -k 0 -k 0 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 9 -k 9 ;"),(GlobalName+'_Wire'))
+    
+    curve12Size = 12
+    
+
+    
+    
+    
+    curveOption = basecurve12
+    curveOptionFinal.append(curveOption)
+    curveSize=curve12Size
+    
+    for i in range(curveSize):
+        cls = cmds.cluster(str(curveOption)+'.cv['+str(i)+']',n=(GlobalName+'CrvCls_0'+str(i)))
+        clusterList.append(cls[1])
+        
+        
+    for i in clusterList:
+        tmpctrls = cmds.circle(n=(i+'_Ctrl'),nr=[1,0,0],ch=0)
+        cmds.delete(cmds.pointConstraint(i,tmpctrls))
+        cmds.makeIdentity(tmpctrls, apply=True, t=1, r=1, s=1 )
+        cmds.pointConstraint(tmpctrls,i,mo=True)
+        ctrlList.append(tmpctrls[0])
+        
+        
+    clGrp = cmds.group(clusterList,n=('Cl_Group'+GlobalName))
+    ctrlGrp = cmds.group(ctrlList,n=('Ctrl_Group'+GlobalName))
+    
+    mainGrp = cmds.group(clGrp,ctrlGrp,curveOption,n=('Main_'+GlobalName+'_Grp'))
+    return ctrlList
+    
 
 
 def Fivecrv():
@@ -149,5 +185,3 @@ def final():
 
 
 UI()
-
- 
